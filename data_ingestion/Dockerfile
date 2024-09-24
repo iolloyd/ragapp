@@ -16,6 +16,6 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the data ingestion script and data
 COPY data_ingestion.py .
-COPY ../data/data.jsonl ./data.jsonl
+# COPY ../data/data.jsonl ./data.jsonl
 
 # The entrypoint will be defined in the docker-compose.yml

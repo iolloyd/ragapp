@@ -57,7 +57,7 @@ def main():
 
     # Read and process the JSONL file
     try:
-        with open('data.jsonl', 'r') as file:
+        with open('data/data.jsonl', 'r') as file:
             for line in file:
                 record = json.loads(line)
 

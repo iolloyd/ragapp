@@ -31,7 +31,7 @@ services:
       DB_PORT: 5432
       MODEL_NAME: sentence-transformers/all-MiniLM-L6-v2
     volumes:
-      - ./data:/app
+      - ./data:/app/data
     command: ["python", "data_ingestion.py"]
 
   app:
