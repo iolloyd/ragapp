@@ -1,0 +1,6 @@
+# data_ingestion/requirements.txt
+
+psycopg2-binary==2.9.6
+transformers==4.34.0
+torch==2.0.1
+sentence-transformers==2.2.2
