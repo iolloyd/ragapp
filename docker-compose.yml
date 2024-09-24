@@ -1,0 +1,60 @@
+# docker-compose.yml
+
+version: '3.9'
+
+services:
+  db:
+    build:
+      context: ./db
+      dockerfile: Dockerfile
+    container_name: postgres_db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  data_ingestion:
+    build:
+      context: ./data_ingestion
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      MODEL_NAME: sentence-transformers/all-MiniLM-L6-v2
+    volumes:
+      - ./data:/app
+    command: ["python", "data_ingestion.py"]
+
+  app:
+    build:
+      context: ./app
+      dockerfile: Dockerfile
+      args:
+        EMBEDDING_MODEL_NAME: sentence-transformers/all-MiniLM-L6-v2
+        GENERATION_MODEL_NAME: EleutherAI/gpt-neo-1.3B
+    environment:
+      POSTGRES_DB: postgres
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      DB_HOST: db
+      DB_PORT: 5432
+      EMBEDDING_MODEL_NAME: sentence-transformers/all-MiniLM-L6-v2
+      GENERATION_MODEL_NAME: EleutherAI/gpt-neo-1.3B
+    ports:
+      - "8501:8501"
+    depends_on:
+      - db
+    volumes:
+      - ./app:/app
+
+volumes:
+  pgdata:
